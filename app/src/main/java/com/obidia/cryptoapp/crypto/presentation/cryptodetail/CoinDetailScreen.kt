@@ -162,7 +162,7 @@ fun CoinDetailScreen(
                     )
                     Icon(
                         modifier = Modifier.size(20.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.trending),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_trending_up),
                         contentDescription = "",
                         tint = MaterialTheme.colorScheme.onSecondary
                     )

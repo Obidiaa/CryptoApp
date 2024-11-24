@@ -1,4 +1,4 @@
-package com.obidia.cryptoapp.crypto.presentation.components
+package com.obidia.cryptoapp.crypto.presentation.cryptolist.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -35,7 +35,7 @@ import androidx.compose.ui.unit.dp
 import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
-import com.obidia.cryptoapp.crypto.presentation.CryptoItemUi
+import com.obidia.cryptoapp.crypto.presentation.cryptolist.CryptoItemUi
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import com.obidia.cryptoapp.ui.theme.RobotoMono
 

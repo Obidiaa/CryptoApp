@@ -1,4 +1,4 @@
-package com.obidia.cryptoapp.crypto.presentation
+package com.obidia.cryptoapp.crypto.presentation.cryptolist
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,8 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import com.obidia.cryptoapp.core.presentation.util.Route
-import com.obidia.cryptoapp.crypto.presentation.components.CryptoListItem
-import com.obidia.cryptoapp.crypto.presentation.components.dataPreview
+import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.CryptoListItem
+import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.dataPreview
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import com.obidia.cryptoapp.ui.theme.RobotoMono
 

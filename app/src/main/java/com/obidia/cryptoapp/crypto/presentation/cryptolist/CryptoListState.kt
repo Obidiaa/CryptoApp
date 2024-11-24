@@ -1,4 +1,4 @@
-package com.obidia.cryptoapp.crypto.presentation
+package com.obidia.cryptoapp.crypto.presentation.cryptolist
 
 import androidx.annotation.DrawableRes
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber

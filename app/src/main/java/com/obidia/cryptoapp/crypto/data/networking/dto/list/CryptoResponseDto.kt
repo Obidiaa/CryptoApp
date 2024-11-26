@@ -4,7 +4,7 @@ import com.obidia.cryptoapp.crypto.domain.Crypto
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinResponseDto(
+data class CryptoResponseDto(
     val data: List<CoinDto>
 )
 

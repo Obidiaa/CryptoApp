@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -40,22 +41,57 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
 import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
 import com.obidia.cryptoapp.R
+import com.obidia.cryptoapp.core.presentation.util.CoinDetailScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.components.LineChart
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.model.ChartStyle
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import com.obidia.cryptoapp.ui.theme.RobotoMono
+import org.koin.androidx.compose.koinViewModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
+
+fun NavGraphBuilder.coinDetailScreen(navigate: (Route) -> Unit) {
+    composable<CoinDetailScreenRoute> {
+        val idCoin = it.toRoute<CoinDetailScreenRoute>().id
+        val viewModel = koinViewModel<CryptoDetailViewModel>()
+
+        LoadData(idCoin = idCoin, viewModel = viewModel)
+
+        CoinDetailScreen(
+            state = viewModel.state.collectAsStateWithLifecycle().value,
+            modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
+            id = idCoin,
+            action = viewModel::action
+        )
+    }
+}
+
+@Composable
+fun LoadData(
+    idCoin: String,
+    viewModel: CryptoDetailViewModel,
+) {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.getDetailCoin(idCoin)
+        viewModel.getHistoryCoin(idCoin = idCoin, interval = "1d")
+    }
+}
 
 @Composable
 fun CoinDetailScreen(
     state: CryptoDetailState,
     modifier: Modifier = Modifier,
     id: String,
+    action: (CryptoDetailEvent) -> Unit
 ) {
     if (state.isCoinDetailLoading) {
         Box(
@@ -187,6 +223,7 @@ fun CoinDetailScreen(
                         modifier = Modifier
                             .clickable {
                                 itemSelected.value = it
+                                action(CryptoDetailEvent.OnClickItem(idCoin = id, interval = it))
                             }
                             .background(
                                 if (itemSelected.value == it) MaterialTheme.colorScheme.primary else Color.Transparent,
@@ -274,6 +311,7 @@ fun PreviewCoinDetail() {
                 ), listDataPoint = coinHistoryRandomized
             ),
             id = "",
+            action = {}
         )
     }
 }

@@ -9,7 +9,7 @@ import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CoinDetailDto
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CoinHistoryDto
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCoinDetail
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCoinPrice
-import com.obidia.cryptoapp.crypto.data.networking.dto.list.CoinResponseDto
+import com.obidia.cryptoapp.crypto.data.networking.dto.list.CryptoResponseDto
 import com.obidia.cryptoapp.crypto.data.networking.dto.list.toCoin
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
 import com.obidia.cryptoapp.crypto.domain.CryptoDetail
@@ -23,7 +23,7 @@ import java.time.ZonedDateTime
 
 class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSource {
     override suspend fun getCoins(): Result<List<Crypto>, NetworkError> {
-        return safeCall<CoinResponseDto> {
+        return safeCall<CryptoResponseDto> {
             httpClient.get(urlString = constructUrl("/assets"))
         }.map { response ->
             response.data.map { it.toCoin() }

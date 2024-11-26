@@ -3,6 +3,7 @@ package com.obidia.cryptoapp.di
 import com.obidia.cryptoapp.core.data.networking.HttpClientFactory
 import com.obidia.cryptoapp.crypto.data.networking.RemoteCryptoDataSource
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
+import com.obidia.cryptoapp.crypto.presentation.cryptodetail.CryptoDetailViewModel
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.CryptoListViewModel
 import io.ktor.client.engine.cio.CIO
 import org.koin.androidx.viewmodel.dsl.viewModel
@@ -15,4 +16,5 @@ val appModule = module {
     singleOf(::RemoteCryptoDataSource).bind<CryptoDataSource>()
 
     viewModel { CryptoListViewModel(get()) }
+    viewModel { CryptoDetailViewModel(get()) }
 }

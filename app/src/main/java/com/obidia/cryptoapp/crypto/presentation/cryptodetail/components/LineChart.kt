@@ -37,6 +37,7 @@ import com.obidia.cryptoapp.crypto.presentation.cryptodetail.model.ValueLabel
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
+import kotlin.math.abs
 import kotlin.random.Random
 
 @Composable
@@ -73,9 +74,6 @@ fun LineChart(
     var drawPoints by remember {
         mutableStateOf(listOf<DataPoint>())
     }
-    var isShowingDataPoints by remember {
-        mutableStateOf(selectedDataPoint != null)
-    }
 
     val width = LocalConfiguration.current.screenWidthDp.dp - (style.horizontalPadding * 2)
     val density = LocalDensity.current
@@ -85,27 +83,21 @@ fun LineChart(
     val paddingHorizontal = with(density) {
         (style.horizontalPadding).toPx()
     }
+    val range = (widthPx) / (visibleDataPoints.size - 1)
 
     Canvas(
         modifier = modifier
             .fillMaxSize()
             .pointerInput(drawPoints) {
                 detectHorizontalDragGestures { change, _ ->
-                    val newSelectedDataPointIndex = getSelectedDataPointIndex(
-                        touchOffsetX = change.position.x,
-                        triggerWidth = 20f,
-                        drawPoints = drawPoints
-                    )
-                    isShowingDataPoints =
-                        (newSelectedDataPointIndex + visibleDataPointsIndices.first) in
-                                visibleDataPointsIndices
-                    if (isShowingDataPoints) {
-                        onSelectedDataPoint(dataPoints[newSelectedDataPointIndex])
-                    }
+                    val indexDataPoint = visibleDataPointsIndices.minByOrNull { dataPoint ->
+                        abs(dataPoint * range + paddingHorizontal - change.position.x)
+                    } ?: 0
+
+                    onSelectedDataPoint(visibleDataPoints[indexDataPoint])
                 }
             }
     ) {
-        val range = (widthPx) / (visibleDataPoints.size - 1)
         val verticalPaddingPx = style.verticalPadding.toPx()
 
         val xLabelTextLayoutResults = visibleDataPoints.map {
@@ -245,7 +237,7 @@ fun LineChart(
         )
 
         drawPoints.forEachIndexed { index, point ->
-            if (selectedDataPointIndex == index && isShowingDataPoints) {
+            if (selectedDataPointIndex == index) {
                 val circleOffset = Offset(
                     x = point.x,
                     y = point.y
@@ -264,18 +256,6 @@ fun LineChart(
                 )
             }
         }
-    }
-}
-
-private fun getSelectedDataPointIndex(
-    touchOffsetX: Float,
-    triggerWidth: Float,
-    drawPoints: List<DataPoint>
-): Int {
-    val triggerRangeLeft = touchOffsetX - triggerWidth / 2f
-    val triggerRangeRight = touchOffsetX + triggerWidth / 2f
-    return drawPoints.indexOfFirst {
-        it.x in triggerRangeLeft..triggerRangeRight
     }
 }
 

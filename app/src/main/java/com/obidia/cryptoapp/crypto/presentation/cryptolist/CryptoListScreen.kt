@@ -18,6 +18,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
@@ -25,11 +26,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavGraphBuilder
+import androidx.navigation.compose.composable
+import com.obidia.cryptoapp.core.presentation.util.CoinListScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.CryptoListItem
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.dataPreview
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import com.obidia.cryptoapp.ui.theme.RobotoMono
+import org.koin.androidx.compose.koinViewModel
+
+fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
+    composable<CoinListScreenRoute> {
+        val viewModel = koinViewModel<CryptoListViewModel>()
+        val state by viewModel.state.collectAsStateWithLifecycle()
+
+        CoinListScreen(
+            uiState = state,
+            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceBright),
+            navigate
+        )
+    }
+}
 
 @Composable
 fun CoinListScreen(

@@ -1,11 +1,13 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptolist
 
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
 import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.domain.Crypto
 
+@Immutable
 data class CryptoListState(
     val isLoading: Boolean = false,
     val coins: List<CryptoItemUi> = emptyList(),

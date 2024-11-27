@@ -7,6 +7,8 @@ import com.obidia.cryptoapp.core.domain.util.onSuccess
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -25,23 +27,21 @@ class CryptoListViewModel(
         CryptoListState()
     )
 
-    private fun loadCoins() {
-        viewModelScope.launch {
-            _state.update { it.copy(isLoading = true) }
-
-            dataSource.getCoins().onSuccess { listCrypto ->
+    private fun loadCoins() = viewModelScope.launch {
+        dataSource.getCoins().onSuccess { state ->
+            state.onEach { listCrypto ->
                 _state.update {
                     it.copy(
                         isLoading = false,
                         coins = listCrypto.map { crypto -> crypto.toCryptoItemUi() }
                     )
                 }
-            }.onError { error ->
-                _state.update {
-                    it.copy(
-                        isLoading = false
-                    )
-                }
+            }.onStart {
+                _state.update { it.copy(isLoading = true) }
+            }.collect()
+        }.onError { error ->
+            _state.update {
+                it.copy(isLoading = false)
             }
         }
     }

@@ -18,15 +18,17 @@ import com.obidia.cryptoapp.crypto.domain.Crypto
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSource {
-    override suspend fun getCoins(): Result<List<Crypto>, NetworkError> {
+    override suspend fun getCoins(): Result<Flow<List<Crypto>>, NetworkError> {
         return safeCall<CryptoResponseDto> {
             httpClient.get(urlString = constructUrl("/assets"))
         }.map { response ->
-            response.data.map { it.toCoin() }
+            flow { emit(response.data.map { it.toCoin() }) }
         }
     }
 

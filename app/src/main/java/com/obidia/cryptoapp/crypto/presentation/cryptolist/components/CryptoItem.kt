@@ -32,7 +32,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
+import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.CryptoItemUi
@@ -185,5 +185,5 @@ internal val dataPreview = CryptoItemUi(
     marketCapUsd = 12382829.21.toDisplayableNumber(),
     priceUsd = 392032.32.toDisplayableNumber(),
     changePercent24Hr = 0.1.toDisplayableNumber(),
-    iconRes = getDrawableIdForCoin("BTC")
+    iconRes = getDrawableIdForCrypto("BTC")
 )

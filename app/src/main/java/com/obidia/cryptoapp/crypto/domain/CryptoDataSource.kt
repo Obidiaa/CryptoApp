@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 
 interface CryptoDataSource {
-    suspend fun getCoins(): Result<Flow<List<Crypto>>, NetworkError>
+    suspend fun getCryptoList(): Result<Flow<List<Crypto>>, NetworkError>
     suspend fun getHistory(
         coinId: String,
         start: ZonedDateTime,
@@ -14,5 +14,5 @@ interface CryptoDataSource {
         interval: String
     ): Result<List<CryptoPrice>, NetworkError>
 
-    suspend fun getCoinDetail(coinId: String): Result<CryptoDetail, NetworkError>
+    suspend fun getCryptoDetail(coinId: String): Result<CryptoDetail, NetworkError>
 }

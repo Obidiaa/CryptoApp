@@ -24,7 +24,7 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSource {
-    override suspend fun getCoins(): Result<Flow<List<Crypto>>, NetworkError> {
+    override suspend fun getCryptoList(): Result<Flow<List<Crypto>>, NetworkError> {
         return safeCall<CryptoResponseDto> {
             httpClient.get(urlString = constructUrl("/assets"))
         }.map { response ->
@@ -32,7 +32,7 @@ class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSou
         }
     }
 
-    override suspend fun getCoinDetail(coinId: String): Result<CryptoDetail, NetworkError> {
+    override suspend fun getCryptoDetail(coinId: String): Result<CryptoDetail, NetworkError> {
         return safeCall<CryptoDetailDto> {
             httpClient.get(constructUrl("/assets/$coinId"))
         }.map { response ->

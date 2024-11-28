@@ -2,7 +2,7 @@ package com.obidia.cryptoapp.crypto.presentation.cryptolist
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
-import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
+import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.domain.Crypto
@@ -33,5 +33,5 @@ fun Crypto.toCryptoItemUi(): CryptoItemUi = CryptoItemUi(
     marketCapUsd = marketCapUsd.toDisplayableNumber(),
     priceUsd = priceUsd.toDisplayableNumber(),
     changePercent24Hr = changePercent24Hr.toDisplayableNumber(),
-    iconRes = getDrawableIdForCoin(symbol)
+    iconRes = getDrawableIdForCrypto(symbol)
 )

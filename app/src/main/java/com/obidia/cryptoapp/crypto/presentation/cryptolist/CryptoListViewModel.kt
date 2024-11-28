@@ -28,7 +28,7 @@ class CryptoListViewModel(
     )
 
     private fun loadCoins() = viewModelScope.launch {
-        dataSource.getCoins().onSuccess { state ->
+        dataSource.getCryptoList().onSuccess { state ->
             state.onEach { listCrypto ->
                 _state.update {
                     it.copy(

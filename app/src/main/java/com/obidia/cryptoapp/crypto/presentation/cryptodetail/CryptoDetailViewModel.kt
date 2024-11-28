@@ -23,7 +23,7 @@ class CryptoDetailViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isCoinDetailLoading = true) }
 
-            dataSource.getCoinDetail(idCoin).onSuccess { coinDetail ->
+            dataSource.getCryptoDetail(idCoin).onSuccess { coinDetail ->
                 _state.update {
                     it.copy(
                         isCoinDetailLoading = false,

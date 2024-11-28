@@ -1,8 +1,8 @@
-package com.obidia.crypto.core.presentation.util
+package com.obidia.cryptoapp.core.presentation.util
 
 import com.obidia.cryptoapp.R
 
-fun getDrawableIdForCoin(symbol: String): Int {
+fun getDrawableIdForCrypto(symbol: String): Int {
     return when (symbol.uppercase()) {
         "1INCH" -> R.drawable._inch
         "ST" -> R.drawable._st

@@ -45,7 +45,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
+import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.R
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.Route
@@ -309,7 +309,7 @@ fun PreviewCoinDetail() {
                     marketCap = 1203020.2f.toDouble().toDisplayableNumber(),
                     price = 1203020.2f.toDouble().toDisplayableNumber(),
                     changeLast24Hr = 1203020.2f.toDouble().toDisplayableNumber(),
-                    iconRes = getDrawableIdForCoin("BTC")
+                    iconRes = getDrawableIdForCrypto("BTC")
                 ), listDataPoint = coinHistoryRandomized
             ),
             id = "",

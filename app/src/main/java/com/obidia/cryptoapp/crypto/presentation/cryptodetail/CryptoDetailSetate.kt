@@ -1,7 +1,7 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptodetail
 
 import androidx.annotation.DrawableRes
-import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
+import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.domain.CryptoDetail
@@ -29,7 +29,7 @@ fun CryptoDetail.toCoinDetailUi(): CryptoDetailUi {
         marketCap = this.marketCap.toDisplayableNumber(),
         price = this.price.toDisplayableNumber(),
         changeLast24Hr = absoluteChangeFormatted(this.changePercent24Hr, this.price),
-        getDrawableIdForCoin(this.symbol)
+        getDrawableIdForCrypto(this.symbol)
     )
 }
 

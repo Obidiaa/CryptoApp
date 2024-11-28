@@ -182,7 +182,7 @@ fun CoinDetailScreen(
                 Row(
                     modifier = Modifier
                         .background(
-                            color = MaterialTheme.colorScheme.secondary,
+                            color = if (isPositive) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.error,
                             shape = RoundedCornerShape(16.dp)
                         )
                         .padding(vertical = 4.dp, horizontal = 8.dp)
@@ -193,14 +193,16 @@ fun CoinDetailScreen(
                     Text(
                         modifier = Modifier,
                         text = state.coinDetailUi.changeLast24Hr.formatted,
-                        color = MaterialTheme.colorScheme.onSecondary,
+                        color = if (isPositive) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onError,
                         style = MaterialTheme.typography.bodyMedium
                     )
                     Icon(
                         modifier = Modifier.size(20.dp),
-                        imageVector = ImageVector.vectorResource(R.drawable.ic_trending_up),
+                        imageVector = if (isPositive) ImageVector.vectorResource(R.drawable.ic_trending_up) else ImageVector.vectorResource(
+                            R.drawable.ic_trending_down
+                        ),
                         contentDescription = "",
-                        tint = MaterialTheme.colorScheme.onSecondary
+                        tint = if (isPositive) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onError
                     )
                 }
             }

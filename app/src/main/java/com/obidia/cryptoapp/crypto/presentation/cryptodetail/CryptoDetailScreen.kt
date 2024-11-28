@@ -47,7 +47,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.obidia.crypto.core.presentation.util.getDrawableIdForCoin
 import com.obidia.cryptoapp.R
-import com.obidia.cryptoapp.core.presentation.util.CoinDetailScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.components.LineChart
@@ -60,8 +60,8 @@ import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
 fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
-    composable<CoinDetailScreenRoute> {
-        val idCoin = it.toRoute<CoinDetailScreenRoute>().id
+    composable<CryptoDetailScreenRoute> {
+        val idCoin = it.toRoute<CryptoDetailScreenRoute>().id
         val viewModel = koinViewModel<CryptoDetailViewModel>()
 
         LoadData(idCoin = idCoin, viewModel = viewModel)

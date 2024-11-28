@@ -8,4 +8,4 @@ interface Route
 data object CoinListScreenRoute : Route
 
 @Serializable
-data class CoinDetailScreenRoute(val id: String) : Route
+data class CryptoDetailScreenRoute(val id: String) : Route

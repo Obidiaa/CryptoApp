@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.obidia.cryptoapp.core.presentation.util.CoinDetailScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.CoinListScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.CryptoListItem
@@ -101,7 +101,7 @@ fun CoinListScreen(
             }
             items(items = uiState.coins) {
                 CryptoListItem(data = it, modifier = Modifier.fillMaxWidth()) {
-                    navigate(CoinDetailScreenRoute(it.id))
+                    navigate(CryptoDetailScreenRoute(it.id))
                 }
             }
 

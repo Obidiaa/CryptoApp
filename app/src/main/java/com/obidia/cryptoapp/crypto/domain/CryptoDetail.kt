@@ -9,4 +9,7 @@ data class CryptoDetail(
     val marketCap: Double,
     val price: Double,
     val changePercent24Hr: Double,
+    val volume24h: Double,
+    val supply: Double,
+    val maxSupply: Double
 )

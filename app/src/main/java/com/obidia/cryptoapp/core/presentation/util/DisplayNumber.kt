@@ -8,10 +8,13 @@ data class DisplayableNumber(
     val formatted: String
 )
 
-fun Double.toDisplayableNumber(): DisplayableNumber {
+fun Double.toDisplayableNumber(
+    min: Int = 0,
+    max: Int = 0
+): DisplayableNumber {
     val format = NumberFormat.getNumberInstance(Locale.getDefault()).apply {
-        minimumFractionDigits = 2
-        maximumFractionDigits = 2
+        minimumFractionDigits = min
+        maximumFractionDigits = max
     }
 
     return DisplayableNumber(

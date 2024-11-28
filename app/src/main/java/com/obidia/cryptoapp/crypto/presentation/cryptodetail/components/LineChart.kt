@@ -35,6 +35,7 @@ import com.obidia.cryptoapp.crypto.presentation.cryptodetail.DataPoint
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.model.ChartStyle
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.model.ValueLabel
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
+import com.obidia.cryptoapp.ui.theme.RobotoMono
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.math.abs
@@ -103,7 +104,7 @@ fun LineChart(
         val xLabelTextLayoutResults = visibleDataPoints.map {
             measurer.measure(
                 text = it.xLabel,
-                style = textStyle.copy(textAlign = TextAlign.Center)
+                style = textStyle.copy(textAlign = TextAlign.Center, fontFamily = RobotoMono)
             )
         }
         val maxXLabelHeight = xLabelTextLayoutResults.maxOfOrNull { it.size.height } ?: 0
@@ -127,7 +128,7 @@ fun LineChart(
                     x = if (widthPx / 2 > (index * range + paddingHorizontal)) index * range + paddingHorizontal else index * range + paddingHorizontal - result.size.width,
                     y = viewPortBottomY
                 ),
-                color = style.selectedColor
+                color = style.selectedColor,
             )
 
             if (showHelperLines && selectedDataPointIndex == index) {
@@ -153,7 +154,8 @@ fun LineChart(
                 val valueResult = measurer.measure(
                     text = valueLabel.formatted(),
                     style = textStyle.copy(
-                        color = style.selectedColor
+                        color = style.selectedColor,
+                        fontFamily = RobotoMono
                     ),
                     maxLines = 1
                 )
@@ -294,7 +296,7 @@ private fun LineChartPreview() {
                 dataPoints = cryptoHistoryRandomized,
                 style = style,
                 visibleDataPointsIndices = cryptoHistoryRandomized.indices,
-                unit = "$",
+                unit = " $",
                 modifier = Modifier
                     .width(700.dp)
                     .height(500.dp)

@@ -30,8 +30,8 @@ fun Crypto.toCryptoItemUi(): CryptoItemUi = CryptoItemUi(
     rank = rank,
     name = name,
     symbol = symbol,
-    marketCapUsd = marketCapUsd.toDisplayableNumber(),
-    priceUsd = priceUsd.toDisplayableNumber(),
-    changePercent24Hr = changePercent24Hr.toDisplayableNumber(),
+    marketCapUsd = marketCapUsd.toDisplayableNumber(2, 2),
+    priceUsd = priceUsd.toDisplayableNumber(2, 2),
+    changePercent24Hr = changePercent24Hr.toDisplayableNumber(2, 2),
     iconRes = getDrawableIdForCrypto(symbol)
 )

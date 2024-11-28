@@ -8,7 +8,7 @@ import com.obidia.cryptoapp.R
 
 val RobotoMono = FontFamily(
     Font(
-        resId = R.font.roboto_mono_reguler,
+        resId = R.font.roboto_mono_regular,
         weight = FontWeight.Normal
     ),
     Font(

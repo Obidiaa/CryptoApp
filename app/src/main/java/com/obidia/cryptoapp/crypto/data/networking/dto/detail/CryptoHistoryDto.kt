@@ -6,17 +6,17 @@ import java.time.Instant
 import java.time.ZoneId
 
 @Serializable
-data class CoinHistoryDto(
-    val data: List<CoinPriceDto>
+data class CryptoHistoryDto(
+    val data: List<CryptoPriceDto>
 )
 
 @Serializable
-data class CoinPriceDto(
+data class CryptoPriceDto(
     val priceUsd: Double,
     val time: Long
 )
 
-fun CoinPriceDto.toCoinPrice(): CryptoPrice {
+fun CryptoPriceDto.toCryptoPrice(): CryptoPrice {
     return CryptoPrice(
         priceUsd = priceUsd,
         dateTime = Instant.ofEpochMilli(time).atZone(ZoneId.systemDefault())

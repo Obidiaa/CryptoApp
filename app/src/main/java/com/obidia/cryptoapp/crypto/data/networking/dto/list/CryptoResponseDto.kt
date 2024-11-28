@@ -5,11 +5,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CryptoResponseDto(
-    val data: List<CoinDto>
+    val data: List<CryptoDto>
 )
 
 @Serializable
-data class CoinDto(
+data class CryptoDto(
     val id: String,
     val rank: Int,
     val name: String,
@@ -19,7 +19,7 @@ data class CoinDto(
     val changePercent24Hr: Double
 )
 
-fun CoinDto.toCoin(): Crypto = Crypto(
+fun CryptoDto.toCrypto(): Crypto = Crypto(
     id = id,
     rank = rank,
     name = name,

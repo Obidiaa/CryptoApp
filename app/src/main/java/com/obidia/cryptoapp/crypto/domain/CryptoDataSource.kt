@@ -8,11 +8,11 @@ import java.time.ZonedDateTime
 interface CryptoDataSource {
     suspend fun getCryptoList(): Result<Flow<List<Crypto>>, NetworkError>
     suspend fun getHistory(
-        coinId: String,
+        cryptoId: String,
         start: ZonedDateTime,
         end: ZonedDateTime,
         interval: String
     ): Result<List<CryptoPrice>, NetworkError>
 
-    suspend fun getCryptoDetail(coinId: String): Result<CryptoDetail, NetworkError>
+    suspend fun getCryptoDetail(cryptoId: String): Result<CryptoDetail, NetworkError>
 }

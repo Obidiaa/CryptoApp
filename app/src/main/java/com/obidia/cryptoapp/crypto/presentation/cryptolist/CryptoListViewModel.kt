@@ -33,7 +33,7 @@ class CryptoListViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        coins = listCrypto.map { crypto -> crypto.toCryptoItemUi() }
+                        cryptoList = listCrypto.map { crypto -> crypto.toCryptoItemUi() }
                     )
                 }
             }.onStart {
@@ -46,10 +46,10 @@ class CryptoListViewModel(
         }
     }
 
-    fun action(event: CoinListAction) {
+    fun action(event: CryptoListAction) {
         when (event) {
-            is CoinListAction.OnCoinClick -> {}
-            CoinListAction.OnRefresh -> {}
+            is CryptoListAction.OnCryptoClick -> {}
+            CryptoListAction.OnRefresh -> {}
         }
     }
 }

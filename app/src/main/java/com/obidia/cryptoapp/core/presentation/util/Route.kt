@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 interface Route
 
 @Serializable
-data object CoinListScreenRoute : Route
+data object CryptoListScreenRoute : Route
 
 @Serializable
 data class CryptoDetailScreenRoute(val id: String) : Route

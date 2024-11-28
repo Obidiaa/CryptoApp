@@ -268,7 +268,7 @@ private fun LineChartPreview() {
                 .fillMaxSize()
                 .background(Color.White)
         ) {
-            val coinHistoryRandomized = remember {
+            val cryptoHistoryRandomized = remember {
                 (1..20).map {
                     DataPoint(
                         x = ZonedDateTime.now().plusHours(it.toLong()).hour.toFloat(),
@@ -291,15 +291,15 @@ private fun LineChartPreview() {
                 chartLineColorShadow = Color.White
             )
             LineChart(
-                dataPoints = coinHistoryRandomized,
+                dataPoints = cryptoHistoryRandomized,
                 style = style,
-                visibleDataPointsIndices = coinHistoryRandomized.indices,
+                visibleDataPointsIndices = cryptoHistoryRandomized.indices,
                 unit = "$",
                 modifier = Modifier
                     .width(700.dp)
                     .height(500.dp)
                     .background(Color.White),
-                selectedDataPoint = coinHistoryRandomized[1]
+                selectedDataPoint = cryptoHistoryRandomized[1]
             )
         }
     }

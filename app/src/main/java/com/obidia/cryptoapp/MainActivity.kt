@@ -9,7 +9,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.obidia.cryptoapp.core.presentation.util.CoinListScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.CryptoListScreenRoute
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.cryptoDetailScreen
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.cryptoListScreenRoute
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
@@ -24,7 +24,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             navController = rememberNavController()
             CryptoAppTheme {
-                SetNav(CoinListScreenRoute)
+                SetNav(CryptoListScreenRoute)
             }
         }
     }

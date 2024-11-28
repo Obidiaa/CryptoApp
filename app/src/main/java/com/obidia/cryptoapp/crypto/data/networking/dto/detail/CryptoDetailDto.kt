@@ -24,7 +24,7 @@ data class Data(
     val vwap24Hr: String?
 )
 
-fun CryptoDetailDto.toCoinDetail(): CryptoDetail = CryptoDetail(
+fun CryptoDetailDto.toCryptoDetail(): CryptoDetail = CryptoDetail(
     this.data?.name ?: "",
     this.data?.symbol ?: "",
     this.data?.marketCapUsd ?: 0.0,

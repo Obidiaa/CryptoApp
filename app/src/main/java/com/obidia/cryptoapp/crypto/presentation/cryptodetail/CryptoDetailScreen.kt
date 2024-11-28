@@ -93,7 +93,7 @@ fun CoinDetailScreen(
     id: String,
     action: (CryptoDetailEvent) -> Unit
 ) {
-    if (state.isCoinDetailLoading) {
+    if (state.isCryptoDetailLoading) {
         Box(
             modifier = modifier
                 .fillMaxSize(),
@@ -102,9 +102,9 @@ fun CoinDetailScreen(
             CircularProgressIndicator()
         }
     } else {
-        if (state.coinDetailUi == null) return
+        if (state.cryptoDetailUi == null) return
 
-        val coin = state.coinDetailUi
+        val coin = state.cryptoDetailUi
         val isPositive = coin.changeLast24Hr.value > 0.0
 
         Column(
@@ -128,7 +128,7 @@ fun CoinDetailScreen(
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = state.coinDetailUi.name,
+                    text = state.cryptoDetailUi.name,
                     style = MaterialTheme.typography.headlineSmall.copy(
                         color = MaterialTheme.colorScheme.onSurface,
                         fontWeight = FontWeight.Bold,
@@ -174,7 +174,7 @@ fun CoinDetailScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "${state.coinDetailUi.price.formatted} $",
+                    text = "${state.cryptoDetailUi.price.formatted} $",
                     style = MaterialTheme.typography.headlineMedium.copy(fontWeight = FontWeight.Bold),
                     color = MaterialTheme.colorScheme.onSurface
                 )
@@ -192,7 +192,7 @@ fun CoinDetailScreen(
                 ) {
                     Text(
                         modifier = Modifier,
-                        text = state.coinDetailUi.changeLast24Hr.formatted,
+                        text = state.cryptoDetailUi.changeLast24Hr.formatted,
                         color = if (isPositive) MaterialTheme.colorScheme.onSecondary else MaterialTheme.colorScheme.onError,
                         style = MaterialTheme.typography.bodyMedium
                     )
@@ -248,7 +248,7 @@ fun CoinDetailScreen(
                 mutableStateOf<DataPoint?>(null)
             }
 
-            if (state.isCoinHistoryLoading) {
+            if (state.isCryptoHistoryLoading) {
                 Box(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -303,7 +303,7 @@ fun PreviewCoinDetail() {
     CryptoAppTheme {
         CoinDetailScreen(
             state = CryptoDetailState(
-                coinDetailUi = CryptoDetailUi(
+                cryptoDetailUi = CryptoDetailUi(
                     "Bitcoin",
                     "BTC",
                     marketCap = 1203020.2f.toDouble().toDisplayableNumber(),

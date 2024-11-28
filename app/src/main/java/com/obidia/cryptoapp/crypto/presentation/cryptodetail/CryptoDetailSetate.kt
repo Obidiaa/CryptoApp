@@ -7,9 +7,9 @@ import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.domain.CryptoDetail
 
 data class CryptoDetailState(
-    val isCoinDetailLoading: Boolean = false,
-    val isCoinHistoryLoading: Boolean = false,
-    val coinDetailUi: CryptoDetailUi? = null,
+    val isCryptoDetailLoading: Boolean = false,
+    val isCryptoHistoryLoading: Boolean = false,
+    val cryptoDetailUi: CryptoDetailUi? = null,
     val listDataPoint: List<DataPoint> = emptyList()
 )
 
@@ -22,7 +22,7 @@ data class CryptoDetailUi(
     @DrawableRes val iconRes: Int,
 )
 
-fun CryptoDetail.toCoinDetailUi(): CryptoDetailUi {
+fun CryptoDetail.toCryptoDetailUi(): CryptoDetailUi {
     return CryptoDetailUi(
         name = this.name,
         symbol = this.symbol,

@@ -30,7 +30,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
-import com.obidia.cryptoapp.core.presentation.util.CoinListScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.CryptoListScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.CryptoListItem
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.dataPreview
@@ -39,7 +39,7 @@ import com.obidia.cryptoapp.ui.theme.RobotoMono
 import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
-    composable<CoinListScreenRoute> {
+    composable<CryptoListScreenRoute> {
         val viewModel = koinViewModel<CryptoListViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -99,7 +99,7 @@ fun CoinListScreen(
                     }
                 }
             }
-            items(items = uiState.coins) {
+            items(items = uiState.cryptoList) {
                 CryptoListItem(data = it, modifier = Modifier.fillMaxWidth()) {
                     navigate(CryptoDetailScreenRoute(it.id))
                 }
@@ -123,7 +123,7 @@ fun PreviewCoinListScreen() {
     CryptoAppTheme {
         CoinListScreen(
             uiState = CryptoListState(
-                coins = (1..100).map {
+                cryptoList = (1..100).map {
                     dataPreview.copy(id = it.toString())
                 }
             ),

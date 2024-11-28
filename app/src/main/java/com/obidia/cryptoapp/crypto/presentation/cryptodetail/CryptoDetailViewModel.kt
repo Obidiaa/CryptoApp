@@ -21,13 +21,13 @@ class CryptoDetailViewModel(
 
     fun getDetailCoin(idCoin: String) {
         viewModelScope.launch {
-            _state.update { it.copy(isCoinDetailLoading = true) }
+            _state.update { it.copy(isCryptoDetailLoading = true) }
 
             dataSource.getCryptoDetail(idCoin).onSuccess { coinDetail ->
                 _state.update {
                     it.copy(
-                        isCoinDetailLoading = false,
-                        coinDetailUi = coinDetail.toCoinDetailUi(),
+                        isCryptoDetailLoading = false,
+                        cryptoDetailUi = coinDetail.toCryptoDetailUi(),
                     )
                 }
             }.onError {
@@ -45,12 +45,12 @@ class CryptoDetailViewModel(
     }
 
     fun getHistoryCoin(idCoin: String, interval: String) {
-        _state.update { it.copy(isCoinHistoryLoading = true) }
+        _state.update { it.copy(isCryptoHistoryLoading = true) }
 
         viewModelScope.launch {
             dataSource
                 .getHistory(
-                    coinId = idCoin,
+                    cryptoId = idCoin,
                     start = ZonedDateTime.now().minusDays(
                         when (interval) {
                             "1d" -> 1
@@ -87,7 +87,7 @@ class CryptoDetailViewModel(
                         }
 
                     _state.update {
-                        it.copy(listDataPoint = dataPoints, isCoinHistoryLoading = false)
+                        it.copy(listDataPoint = dataPoints, isCryptoHistoryLoading = false)
                     }
                 }
                 .onError { error -> }

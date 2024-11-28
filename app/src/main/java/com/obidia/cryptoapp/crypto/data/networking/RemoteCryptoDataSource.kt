@@ -6,11 +6,11 @@ import com.obidia.cryptoapp.core.domain.util.NetworkError
 import com.obidia.cryptoapp.core.domain.util.Result
 import com.obidia.cryptoapp.core.domain.util.map
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CryptoDetailDto
-import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CoinHistoryDto
-import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCoinDetail
-import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCoinPrice
+import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CryptoHistoryDto
+import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCryptoDetail
+import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCryptoPrice
 import com.obidia.cryptoapp.crypto.data.networking.dto.list.CryptoResponseDto
-import com.obidia.cryptoapp.crypto.data.networking.dto.list.toCoin
+import com.obidia.cryptoapp.crypto.data.networking.dto.list.toCrypto
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
 import com.obidia.cryptoapp.crypto.domain.CryptoDetail
 import com.obidia.cryptoapp.crypto.domain.CryptoPrice
@@ -28,25 +28,25 @@ class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSou
         return safeCall<CryptoResponseDto> {
             httpClient.get(urlString = constructUrl("/assets"))
         }.map { response ->
-            flow { emit(response.data.map { it.toCoin() }) }
+            flow { emit(response.data.map { it.toCrypto() }) }
         }
     }
 
-    override suspend fun getCryptoDetail(coinId: String): Result<CryptoDetail, NetworkError> {
+    override suspend fun getCryptoDetail(cryptoId: String): Result<CryptoDetail, NetworkError> {
         return safeCall<CryptoDetailDto> {
-            httpClient.get(constructUrl("/assets/$coinId"))
+            httpClient.get(constructUrl("/assets/$cryptoId"))
         }.map { response ->
-            response.toCoinDetail()
+            response.toCryptoDetail()
         }
     }
 
     override suspend fun getHistory(
-        coinId: String,
+        cryptoId: String,
         start: ZonedDateTime,
         end: ZonedDateTime,
         interval: String
     ): Result<List<CryptoPrice>, NetworkError> {
-        val intervalCoin = when (interval) {
+        val intervalCrypto = when (interval) {
             "1d" -> "h1"
             "1w" -> "h1"
             "1m" -> "d1"
@@ -64,16 +64,16 @@ class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSou
             .toInstant()
             .toEpochMilli()
 
-        return safeCall<CoinHistoryDto> {
+        return safeCall<CryptoHistoryDto> {
             httpClient.get(
-                urlString = constructUrl("/assets/$coinId/history")
+                urlString = constructUrl("/assets/$cryptoId/history")
             ) {
-                parameter("interval", intervalCoin)
+                parameter("interval", intervalCrypto)
                 parameter("start", startMillis)
                 parameter("end", endMillis)
             }
         }.map { response ->
-            response.data.map { it.toCoinPrice() }
+            response.data.map { it.toCryptoPrice() }
         }
     }
 }

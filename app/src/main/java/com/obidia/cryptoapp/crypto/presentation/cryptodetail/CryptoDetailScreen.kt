@@ -59,7 +59,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
-fun NavGraphBuilder.coinDetailScreen(navigate: (Route) -> Unit) {
+fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
     composable<CoinDetailScreenRoute> {
         val idCoin = it.toRoute<CoinDetailScreenRoute>().id
         val viewModel = koinViewModel<CryptoDetailViewModel>()

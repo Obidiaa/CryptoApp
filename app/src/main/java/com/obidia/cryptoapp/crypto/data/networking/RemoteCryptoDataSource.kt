@@ -5,7 +5,7 @@ import com.obidia.cryptoapp.core.data.networking.safeCall
 import com.obidia.cryptoapp.core.domain.util.NetworkError
 import com.obidia.cryptoapp.core.domain.util.Result
 import com.obidia.cryptoapp.core.domain.util.map
-import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CoinDetailDto
+import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CryptoDetailDto
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.CoinHistoryDto
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCoinDetail
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCoinPrice
@@ -33,7 +33,7 @@ class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSou
     }
 
     override suspend fun getCoinDetail(coinId: String): Result<CryptoDetail, NetworkError> {
-        return safeCall<CoinDetailDto> {
+        return safeCall<CryptoDetailDto> {
             httpClient.get(constructUrl("/assets/$coinId"))
         }.map { response ->
             response.toCoinDetail()

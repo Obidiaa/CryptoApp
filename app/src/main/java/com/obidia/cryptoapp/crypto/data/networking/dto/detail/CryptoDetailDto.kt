@@ -4,7 +4,7 @@ import com.obidia.cryptoapp.crypto.domain.CryptoDetail
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CoinDetailDto(
+data class CryptoDetailDto(
     val data: Data?,
     val timestamp: Long?
 )
@@ -24,7 +24,7 @@ data class Data(
     val vwap24Hr: String?
 )
 
-fun CoinDetailDto.toCoinDetail(): CryptoDetail = CryptoDetail(
+fun CryptoDetailDto.toCoinDetail(): CryptoDetail = CryptoDetail(
     this.data?.name ?: "",
     this.data?.symbol ?: "",
     this.data?.marketCapUsd ?: 0.0,

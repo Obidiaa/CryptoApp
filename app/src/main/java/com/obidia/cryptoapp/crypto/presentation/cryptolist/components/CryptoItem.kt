@@ -2,7 +2,6 @@ package com.obidia.cryptoapp.crypto.presentation.cryptolist.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,13 +26,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.semantics.onClick
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
-import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
+import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.CryptoItemUi
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
@@ -46,6 +47,7 @@ fun CryptoListItem(
     onClick: () -> Unit
 ) {
     Card(
+        onClick = onClick,
         elevation = CardDefaults.cardElevation(
             defaultElevation = 1.dp
         ),
@@ -58,7 +60,9 @@ fun CryptoListItem(
         ),
         modifier = modifier
             .fillMaxWidth()
-            .clickable(onClick = onClick)
+            .semantics {
+                this.onClick("", null)
+            }
             .padding(horizontal = 16.dp)
     ) {
         Row(

@@ -1,5 +1,7 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptodetail
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -64,7 +66,14 @@ import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
 fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
-    composable<CryptoDetailScreenRoute> {
+    composable<CryptoDetailScreenRoute>(
+        enterTransition = { slideInHorizontally { initialOffset ->
+            initialOffset
+        } },
+        exitTransition = { slideOutHorizontally { initialOffset ->
+            initialOffset
+        } }
+    ) {
         val idCoin = it.toRoute<CryptoDetailScreenRoute>().id
         val viewModel = koinViewModel<CryptoDetailViewModel>()
 

@@ -1,5 +1,7 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptolist
 
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +41,10 @@ import com.obidia.cryptoapp.ui.theme.RobotoMono
 import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
-    composable<CryptoListScreenRoute> {
+    composable<CryptoListScreenRoute>(
+        popExitTransition = { slideOutHorizontally() },
+        popEnterTransition = { slideInHorizontally() }
+    ) {
         val viewModel = koinViewModel<CryptoListViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 

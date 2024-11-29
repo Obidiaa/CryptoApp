@@ -50,8 +50,7 @@ fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
 
         CoinListScreen(
             uiState = state,
-            modifier = Modifier.background(MaterialTheme.colorScheme.surfaceBright),
-            navigate
+            navigate = navigate
         )
     }
 }
@@ -130,9 +129,9 @@ fun PreviewCoinListScreen() {
             uiState = CryptoListState(
                 cryptoList = (1..100).map {
                     dataPreview.copy(id = it.toString())
-                }
+                },
+                isLoading = false
             ),
-            modifier = Modifier.background(MaterialTheme.colorScheme.background)
         ) { }
     }
 }

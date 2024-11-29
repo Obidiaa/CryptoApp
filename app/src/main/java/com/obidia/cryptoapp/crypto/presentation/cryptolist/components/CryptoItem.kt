@@ -49,12 +49,13 @@ fun CryptoListItem(
     Card(
         onClick = onClick,
         elevation = CardDefaults.cardElevation(
-            defaultElevation = 1.dp
+            defaultElevation = 1.dp,
+            pressedElevation = 1.dp
         ),
         shape = RoundedCornerShape(16.dp),
         colors = CardColors(
             containerColor = MaterialTheme.colorScheme.surface,
-            contentColor = MaterialTheme.colorScheme.surface,
+            contentColor = MaterialTheme.colorScheme.outline,
             disabledContentColor = Color.Transparent,
             disabledContainerColor = Color.Transparent
         ),

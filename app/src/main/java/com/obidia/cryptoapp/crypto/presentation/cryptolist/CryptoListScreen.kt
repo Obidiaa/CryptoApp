@@ -1,7 +1,7 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptolist
 
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -42,15 +42,28 @@ import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
     composable<CryptoListScreenRoute>(
-        popExitTransition = { slideOutHorizontally() },
-        popEnterTransition = { slideInHorizontally() }
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.End,
+                tween(700)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start,
+                tween(700)
+            )
+        },
     ) {
         val viewModel = koinViewModel<CryptoListViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
+
         CoinListScreen(
             uiState = state,
-            navigate = navigate
+            onClick = { idCrypto ->
+                navigate(CryptoDetailScreenRoute(idCrypto))
+            }
         )
     }
 }
@@ -59,7 +72,7 @@ fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
 fun CoinListScreen(
     uiState: CryptoListState,
     modifier: Modifier = Modifier,
-    navigate: (Route) -> Unit
+    onClick: (id: String) -> Unit
 ) {
     if (uiState.isLoading) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -105,7 +118,7 @@ fun CoinListScreen(
             }
             items(items = uiState.cryptoList) {
                 CryptoListItem(data = it, modifier = Modifier.fillMaxWidth()) {
-                    navigate(CryptoDetailScreenRoute(it.id))
+                    onClick(it.id)
                 }
             }
 

@@ -1,29 +1,43 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptodetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.obidia.cryptoapp.core.domain.util.onError
 import com.obidia.cryptoapp.core.domain.util.onSuccess
+import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 
 class CryptoDetailViewModel(
-    private val dataSource: CryptoDataSource
+    private val dataSource: CryptoDataSource,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
+    private val cryptoId = savedStateHandle.toRoute<CryptoDetailScreenRoute>().id
     private val _state = MutableStateFlow(CryptoDetailState())
-    val state get() = _state.asStateFlow()
+    val state = _state.onStart {
+        getDetailCoin()
+        getHistoryCoin(cryptoId, "1d")
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(5000L),
+        CryptoDetailState()
+    )
 
-    fun getDetailCoin(idCoin: String) {
+    private fun getDetailCoin() {
         viewModelScope.launch {
             _state.update { it.copy(isCryptoDetailLoading = true) }
 
-            dataSource.getCryptoDetail(idCoin).onSuccess { coinDetail ->
+            dataSource.getCryptoDetail(cryptoId).onSuccess { coinDetail ->
                 _state.update {
                     it.copy(
                         isCryptoDetailLoading = false,
@@ -39,12 +53,12 @@ class CryptoDetailViewModel(
     fun action(event: CryptoDetailEvent) {
         when (event) {
             is CryptoDetailEvent.OnClickItem -> {
-                getHistoryCoin(event.idCoin, event.interval)
+                getHistoryCoin(cryptoId, event.interval)
             }
         }
     }
 
-    fun getHistoryCoin(idCoin: String, interval: String) {
+    private fun getHistoryCoin(idCoin: String, interval: String) {
         _state.update { it.copy(isCryptoHistoryLoading = true) }
 
         viewModelScope.launch {

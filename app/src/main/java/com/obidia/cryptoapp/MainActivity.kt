@@ -36,7 +36,7 @@ class MainActivity : ComponentActivity() {
             startDestination = startDestination
         ) {
             cryptoListScreenRoute(::navigate)
-            cryptoDetailScreen(::navigate)
+            cryptoDetailScreen()
         }
     }
 

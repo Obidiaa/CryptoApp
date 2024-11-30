@@ -1,7 +1,7 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptodetail
 
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -31,7 +31,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -50,10 +49,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.toRoute
 import com.obidia.cryptoapp.R
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
-import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.components.LineChart
@@ -65,37 +62,31 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
-fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
+fun NavGraphBuilder.cryptoDetailScreen() {
     composable<CryptoDetailScreenRoute>(
-        enterTransition = { slideInHorizontally { initialOffset ->
-            initialOffset
-        } },
-        exitTransition = { slideOutHorizontally { initialOffset ->
-            initialOffset
-        } }
+        enterTransition = {
+            slideIntoContainer(
+                AnimatedContentTransitionScope.SlideDirection.Start,
+                tween(700)
+            )
+        },
+        exitTransition = {
+            slideOutOfContainer(
+                AnimatedContentTransitionScope.SlideDirection.End,
+                tween(700)
+            )
+        },
     ) {
-        val idCoin = it.toRoute<CryptoDetailScreenRoute>().id
         val viewModel = koinViewModel<CryptoDetailViewModel>()
-
-        LoadData(idCoin = idCoin, viewModel = viewModel)
+        val event = viewModel::action
 
         CoinDetailScreen(
             state = viewModel.state.collectAsStateWithLifecycle().value,
             modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
-            id = idCoin,
-            action = viewModel::action
+            onClick = { interval ->
+                event(CryptoDetailEvent.OnClickItem(interval))
+            }
         )
-    }
-}
-
-@Composable
-fun LoadData(
-    idCoin: String,
-    viewModel: CryptoDetailViewModel,
-) {
-    LaunchedEffect(key1 = Unit) {
-        viewModel.getDetailCoin(idCoin)
-        viewModel.getHistoryCoin(idCoin = idCoin, interval = "1d")
     }
 }
 
@@ -103,8 +94,7 @@ fun LoadData(
 fun CoinDetailScreen(
     state: CryptoDetailState,
     modifier: Modifier = Modifier,
-    id: String,
-    action: (CryptoDetailEvent) -> Unit
+    onClick: (interval: String) -> Unit
 ) {
     if (state.isCryptoDetailLoading) {
         Box(
@@ -190,7 +180,10 @@ fun CoinDetailScreen(
             ) {
                 Text(
                     text = "${state.cryptoDetailUi.price.formatted} $",
-                    style = MaterialTheme.typography.headlineSmall.copy(fontWeight = FontWeight.Bold, fontFamily = RobotoMono),
+                    style = MaterialTheme.typography.headlineSmall.copy(
+                        fontWeight = FontWeight.Bold,
+                        fontFamily = RobotoMono
+                    ),
                     color = MaterialTheme.colorScheme.onSurface
                 )
 
@@ -242,7 +235,7 @@ fun CoinDetailScreen(
                         modifier = Modifier
                             .clickable {
                                 itemSelected.value = it
-                                action(CryptoDetailEvent.OnClickItem(idCoin = id, interval = it))
+                                onClick(it)
                             }
                             .background(
                                 if (itemSelected.value == it) MaterialTheme.colorScheme.primary else Color.Transparent,
@@ -398,8 +391,7 @@ fun PreviewCoinDetail() {
                     1203020.2f.toDouble().toDisplayableNumber()
                 ), listDataPoint = coinHistoryRandomized
             ),
-            id = "",
-            action = {}
+            onClick = {}
         )
     }
 }

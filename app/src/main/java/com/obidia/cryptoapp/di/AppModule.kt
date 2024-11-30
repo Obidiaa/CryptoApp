@@ -16,5 +16,5 @@ val appModule = module {
     singleOf(::RemoteCryptoDataSource).bind<CryptoDataSource>()
 
     viewModel { CryptoListViewModel(get()) }
-    viewModel { CryptoDetailViewModel(get()) }
+    viewModel { CryptoDetailViewModel(get(), get()) }
 }

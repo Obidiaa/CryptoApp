@@ -145,6 +145,8 @@ fun PreviewCoinListScreen() {
                 },
                 isLoading = false
             ),
-        ) { }
+        ) {
+
+        }
     }
 }

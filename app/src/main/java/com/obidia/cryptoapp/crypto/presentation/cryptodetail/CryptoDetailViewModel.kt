@@ -1,6 +1,5 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptodetail
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -46,7 +45,6 @@ class CryptoDetailViewModel(
                 )
             }
         }.onError { error ->
-            Log.d("kesini", error.toErrorDataState().toString())
             _state.update {
                 it.copy(
                     errorDataState = error.toErrorDataState(),
@@ -60,6 +58,12 @@ class CryptoDetailViewModel(
         when (event) {
             is CryptoDetailEvent.OnClickItem -> {
                 getHistoryCoin(cryptoId, event.interval)
+            }
+
+            is CryptoDetailEvent.OnClickErrorBtn -> {
+                _state.update {
+                    it.copy(errorDataState = null)
+                }
             }
         }
     }

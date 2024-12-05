@@ -94,6 +94,7 @@ fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
         )
 
         ErrorDialog(errorDataState = state.errorDataState, txtButton = "Back") {
+            viewModel.action(CryptoDetailEvent.OnClickErrorBtn)
             navigate(BackStack)
         }
     }
@@ -109,7 +110,8 @@ fun CoinDetailScreen(
     if (state.isCryptoDetailLoading) {
         Box(
             modifier = modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surface),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()

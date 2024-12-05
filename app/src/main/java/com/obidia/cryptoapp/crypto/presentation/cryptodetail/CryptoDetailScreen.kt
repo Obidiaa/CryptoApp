@@ -50,7 +50,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.obidia.cryptoapp.R
+import com.obidia.cryptoapp.core.presentation.util.BackStack
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.ErrorDialog
+import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.components.LineChart
@@ -62,7 +65,7 @@ import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.random.Random
 
-fun NavGraphBuilder.cryptoDetailScreen() {
+fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
     composable<CryptoDetailScreenRoute>(
         enterTransition = {
             slideIntoContainer(
@@ -79,14 +82,20 @@ fun NavGraphBuilder.cryptoDetailScreen() {
     ) {
         val viewModel = koinViewModel<CryptoDetailViewModel>()
         val event = viewModel::action
+        val state = viewModel.state.collectAsStateWithLifecycle().value
 
         CoinDetailScreen(
-            state = viewModel.state.collectAsStateWithLifecycle().value,
+            state = state,
             modifier = Modifier.background(color = MaterialTheme.colorScheme.background),
             onClick = { interval ->
                 event(CryptoDetailEvent.OnClickItem(interval))
-            }
+            },
+            navigate = navigate
         )
+
+        ErrorDialog(errorDataState = state.errorDataState, txtButton = "Back") {
+            navigate(BackStack)
+        }
     }
 }
 
@@ -94,6 +103,7 @@ fun NavGraphBuilder.cryptoDetailScreen() {
 fun CoinDetailScreen(
     state: CryptoDetailState,
     modifier: Modifier = Modifier,
+    navigate: (Route) -> Unit,
     onClick: (interval: String) -> Unit
 ) {
     if (state.isCryptoDetailLoading) {
@@ -391,7 +401,8 @@ fun PreviewCoinDetail() {
                     1203020.2f.toDouble().toDisplayableNumber()
                 ), listDataPoint = coinHistoryRandomized
             ),
-            onClick = {}
+            onClick = {},
+            navigate = {}
         )
     }
 }

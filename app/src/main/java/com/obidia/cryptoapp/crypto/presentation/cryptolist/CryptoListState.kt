@@ -2,8 +2,9 @@ package com.obidia.cryptoapp.crypto.presentation.cryptolist
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
-import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
+import com.obidia.cryptoapp.core.presentation.util.ErrorDataState
+import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.domain.Crypto
 
@@ -11,7 +12,8 @@ import com.obidia.cryptoapp.crypto.domain.Crypto
 data class CryptoListState(
     val isLoading: Boolean = true,
     val cryptoList: List<CryptoItemUi> = emptyList(),
-    val selectedCrypto: CryptoItemUi? = null
+    val selectedCrypto: CryptoItemUi? = null,
+    val errorState: ErrorDataState? = null
 )
 
 data class CryptoItemUi(

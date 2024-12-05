@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.obidia.cryptoapp.core.domain.util.onError
 import com.obidia.cryptoapp.core.domain.util.onSuccess
+import com.obidia.cryptoapp.core.presentation.util.toErrorDataState
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,23 +34,28 @@ class CryptoListViewModel(
                 _state.update {
                     it.copy(
                         isLoading = false,
-                        cryptoList = listCrypto.map { crypto -> crypto.toCryptoItemUi() }
+                        cryptoList = listCrypto.map { crypto -> crypto.toCryptoItemUi() },
+                        errorState = null
                     )
                 }
             }.onStart {
-                _state.update { it.copy(isLoading = true) }
+                _state.update { it.copy(isLoading = true, errorState = null) }
             }.collect()
         }.onError { error ->
             _state.update {
-                it.copy(isLoading = false)
+                it.copy(isLoading = false, errorState = error.toErrorDataState())
             }
         }
     }
 
     fun action(event: CryptoListAction) {
         when (event) {
-            is CryptoListAction.OnCryptoClick -> {}
-            CryptoListAction.OnRefresh -> {}
+            CryptoListAction.OnClickErrorBtn -> {
+                _state.update {
+                    it.copy(errorState = null, isLoading = true)
+                }
+                loadCoins()
+            }
         }
     }
 }

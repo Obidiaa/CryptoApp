@@ -9,3 +9,6 @@ data object CryptoListScreenRoute : Route
 
 @Serializable
 data class CryptoDetailScreenRoute(val id: String) : Route
+
+@Serializable
+data object BackStack : Route

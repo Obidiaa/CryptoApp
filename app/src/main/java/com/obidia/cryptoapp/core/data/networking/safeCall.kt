@@ -5,6 +5,7 @@ import com.obidia.cryptoapp.core.domain.util.Result
 import io.ktor.client.statement.HttpResponse
 import kotlinx.coroutines.ensureActive
 import kotlinx.serialization.SerializationException
+import java.io.IOException
 import java.nio.channels.UnresolvedAddressException
 import kotlin.coroutines.coroutineContext
 
@@ -20,6 +21,8 @@ suspend inline fun <reified T> safeCall(
     } catch (e: Exception) {
         coroutineContext.ensureActive()
         return Result.Error(NetworkError.UNKNOWN)
+    } catch (e: IOException) {
+        return Result.Error(NetworkError.NO_INTERNET)
     }
 
     return responseResult(response)

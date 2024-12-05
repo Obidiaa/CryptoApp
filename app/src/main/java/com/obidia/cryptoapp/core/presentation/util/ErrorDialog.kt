@@ -2,6 +2,7 @@ package com.obidia.cryptoapp.core.presentation.util
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,16 +23,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
-import com.obidia.cryptoapp.R
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import com.obidia.cryptoapp.ui.theme.RobotoMono
 
 @Composable
-fun ErrorDialog(isShowDialog: Boolean, txtButton: String = "Try", onClick: () -> Unit) {
+fun ErrorDialog(
+    errorDataState: ErrorDataState? = null,
+    txtButton: String = "Try",
+    onClick: () -> Unit
+) {
     val isShow = remember { mutableStateOf(false) }
-    isShow.value = isShowDialog
+    isShow.value = errorDataState != null
 
-    Dialog(
+    if (isShow.value) Dialog(
         onDismissRequest = {
             isShow.value = false
         }
@@ -39,7 +43,7 @@ fun ErrorDialog(isShowDialog: Boolean, txtButton: String = "Try", onClick: () ->
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.background(
-                MaterialTheme.colorScheme.surface,
+                MaterialTheme.colorScheme.surfaceContainerHighest,
                 shape = RoundedCornerShape(16.dp)
             ),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -47,7 +51,10 @@ fun ErrorDialog(isShowDialog: Boolean, txtButton: String = "Try", onClick: () ->
             Spacer(Modifier.height(16.dp))
 
             Image(
-                painter = painterResource(R.drawable.ic_408_dark),
+                painter = painterResource(
+                    id = if (isSystemInDarkTheme()) errorDataState?.imageDark
+                        ?: 0 else errorDataState?.imageLight ?: 0
+                ),
                 contentDescription = ""
             )
 
@@ -58,14 +65,19 @@ fun ErrorDialog(isShowDialog: Boolean, txtButton: String = "Try", onClick: () ->
                     textAlign = TextAlign.Center,
                     color = MaterialTheme.colorScheme.onSurface
                 ),
-                text = stringResource(R.string.error_serialization)
+                text = stringResource(errorDataState?.message ?: 0)
             )
 
-            Spacer(Modifier.height(16.dp))
-        }
+            Button(
+                onClick = {
+                    isShow.value = false
+                    onClick.invoke()
+                }
+            ) {
+                Text(text = txtButton)
+            }
 
-        Button(onClick = { onClick.invoke() }) {
-            Text("")
+            Spacer(Modifier.height(16.dp))
         }
     }
 }
@@ -74,6 +86,6 @@ fun ErrorDialog(isShowDialog: Boolean, txtButton: String = "Try", onClick: () ->
 @Composable
 fun ErrorDialogPreview() {
     CryptoAppTheme {
-        ErrorDialog(isShowDialog = true) {}
+        ErrorDialog() {}
     }
 }

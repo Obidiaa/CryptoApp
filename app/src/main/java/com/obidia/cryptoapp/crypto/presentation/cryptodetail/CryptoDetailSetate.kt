@@ -2,6 +2,7 @@ package com.obidia.cryptoapp.crypto.presentation.cryptodetail
 
 import androidx.annotation.DrawableRes
 import com.obidia.cryptoapp.core.presentation.util.DisplayableNumber
+import com.obidia.cryptoapp.core.presentation.util.ErrorDataState
 import com.obidia.cryptoapp.core.presentation.util.getDrawableIdForCrypto
 import com.obidia.cryptoapp.core.presentation.util.toDisplayableNumber
 import com.obidia.cryptoapp.crypto.domain.CryptoDetail
@@ -10,7 +11,8 @@ data class CryptoDetailState(
     val isCryptoDetailLoading: Boolean = false,
     val isCryptoHistoryLoading: Boolean = false,
     val cryptoDetailUi: CryptoDetailUi? = null,
-    val listDataPoint: List<DataPoint> = emptyList()
+    val listDataPoint: List<DataPoint> = emptyList(),
+    val errorDataState: ErrorDataState? = null
 )
 
 data class CryptoDetailUi(

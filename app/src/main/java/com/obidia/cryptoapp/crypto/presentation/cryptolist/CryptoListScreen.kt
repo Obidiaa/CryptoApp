@@ -33,6 +33,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.CryptoListScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.ErrorDialog
 import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.CryptoListItem
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.dataPreview
@@ -61,10 +62,15 @@ fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
 
         CoinListScreen(
             uiState = state,
+            action = viewModel::action,
             onClick = { idCrypto ->
                 navigate(CryptoDetailScreenRoute(idCrypto))
             }
         )
+
+        ErrorDialog(errorDataState = state.errorState) {
+            viewModel.action(CryptoListAction.OnClickErrorBtn)
+        }
     }
 }
 
@@ -72,10 +78,16 @@ fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
 fun CoinListScreen(
     uiState: CryptoListState,
     modifier: Modifier = Modifier,
+    action: (CryptoListAction) -> Unit,
     onClick: (id: String) -> Unit
 ) {
     if (uiState.isLoading) {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Box(
+            modifier = modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.surfaceContainerHighest),
+            contentAlignment = Alignment.Center
+        ) {
             CircularProgressIndicator()
         }
     } else {
@@ -145,6 +157,7 @@ fun PreviewCoinListScreen() {
                 },
                 isLoading = false
             ),
+            action = {}
         ) {
 
         }

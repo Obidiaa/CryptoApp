@@ -9,7 +9,9 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.obidia.cryptoapp.core.presentation.util.BackStack
 import com.obidia.cryptoapp.core.presentation.util.CryptoListScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.Route
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.cryptoDetailScreen
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.cryptoListScreenRoute
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
@@ -36,11 +38,14 @@ class MainActivity : ComponentActivity() {
             startDestination = startDestination
         ) {
             cryptoListScreenRoute(::navigate)
-            cryptoDetailScreen()
+            cryptoDetailScreen(::navigate)
         }
     }
 
-    private fun navigate(route: Any) {
-        navController.navigate(route)
+    private fun navigate(route: Route) {
+        when (route) {
+            is BackStack -> navController.navigateUp()
+            else -> navController.navigate(route)
+        }
     }
 }

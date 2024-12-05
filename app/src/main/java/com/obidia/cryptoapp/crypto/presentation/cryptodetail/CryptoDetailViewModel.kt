@@ -1,5 +1,6 @@
 package com.obidia.cryptoapp.crypto.presentation.cryptodetail
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -7,6 +8,7 @@ import androidx.navigation.toRoute
 import com.obidia.cryptoapp.core.domain.util.onError
 import com.obidia.cryptoapp.core.domain.util.onSuccess
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
+import com.obidia.cryptoapp.core.presentation.util.toErrorDataState
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,19 +35,23 @@ class CryptoDetailViewModel(
         CryptoDetailState()
     )
 
-    private fun getDetailCoin() {
-        viewModelScope.launch {
-            _state.update { it.copy(isCryptoDetailLoading = true) }
+    private fun getDetailCoin() = viewModelScope.launch {
+        _state.update { it.copy(isCryptoDetailLoading = true) }
 
-            dataSource.getCryptoDetail(cryptoId).onSuccess { coinDetail ->
-                _state.update {
-                    it.copy(
-                        isCryptoDetailLoading = false,
-                        cryptoDetailUi = coinDetail.toCryptoDetailUi(),
-                    )
-                }
-            }.onError {
-
+        dataSource.getCryptoDetail(cryptoId).onSuccess { coinDetail ->
+            _state.update {
+                it.copy(
+                    isCryptoDetailLoading = false,
+                    cryptoDetailUi = coinDetail.toCryptoDetailUi(),
+                )
+            }
+        }.onError { error ->
+            Log.d("kesini", error.toErrorDataState().toString())
+            _state.update {
+                it.copy(
+                    errorDataState = error.toErrorDataState(),
+                    isCryptoDetailLoading = false,
+                )
             }
         }
     }

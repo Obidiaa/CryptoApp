@@ -3,5 +3,6 @@ This is an example of an application that displays information related to crypto
 # Screenshoot
 
 |  | #Dark | #Light |
+|:-----------|:------------:|------------:|
 | Home     | Data 2       | Data 3      |
 | Detail     | Data B       | Data C      |

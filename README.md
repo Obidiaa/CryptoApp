@@ -1,7 +1,5 @@
 This is an example of an application that displays information related to crypto and is developed using Jetpack Compose.
 
-![License](https://img.shields.io/badge/license-Apache%202.0-blue.svg)
-
 # How to run this code
 1. Clone this repository to machine
 2. Open Android Studio

@@ -1,8 +1,7 @@
 This is an example of an application that displays information related to crypto and is developed using Jetpack Compose.
 
-## Screenshoot
+# Screenshoot
 
-| Left Align | Center Align | Right Align |
-|:-----------|:------------:|------------:|
-| Data 1     | Data 2       | Data 3      |
-| Data A     | Data B       | Data C      |
+|  | #Dark | #Light |
+| Home     | Data 2       | Data 3      |
+| Detail     | Data B       | Data C      |

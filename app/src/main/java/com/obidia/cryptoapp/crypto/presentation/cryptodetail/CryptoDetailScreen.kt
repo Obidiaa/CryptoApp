@@ -110,8 +110,8 @@ fun CoinDetailScreen(
     if (state.isCryptoDetailLoading) {
         Box(
             modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surface),
+                .background(MaterialTheme.colorScheme.surface)
+                .fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()

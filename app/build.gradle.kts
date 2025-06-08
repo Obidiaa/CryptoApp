@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -8,6 +11,15 @@ plugins {
 android {
     namespace = "com.obidia.cryptoapp"
     compileSdk = 35
+
+    val localProperties = Properties()
+    val localPropertiesFile = rootProject.file("local.properties")
+
+    if (localPropertiesFile.exists()) {
+        localProperties.load(FileInputStream(localPropertiesFile))
+    } else {
+        println("WARNING: local.properties file not found. Some configurations might be missing.")
+    }
 
     defaultConfig {
         applicationId = "com.obidia.cryptoapp"
@@ -24,7 +36,16 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BASE_URL", "\"https://api.coincap.io/v2/\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "${localProperties.getOrDefault(key = "BASE_URL", defaultValue = "")}"
+            )
+            buildConfigField(
+                "String",
+                "API_KEY",
+                "${localProperties.getOrDefault(key = "API_KEY", defaultValue = "")}"
+            )
         }
         release {
             isMinifyEnabled = false
@@ -33,7 +54,16 @@ android {
                 "proguard-rules.pro"
             )
 
-            buildConfigField("String", "BASE_URL", "\"https://api.coincap.io/v2/\"")
+            buildConfigField(
+                "String",
+                "BASE_URL",
+                "${localProperties.getOrDefault(key = "BASE_URL", defaultValue = "")}"
+            )
+            buildConfigField(
+                "String",
+                "API_KEY",
+                "${localProperties.getOrDefault(key = "API_KEY", defaultValue = "")}"
+            )
         }
     }
     compileOptions {
@@ -79,5 +109,5 @@ dependencies {
     implementation(libs.bundles.ktor)
 
     //navigation compose
-    implementation (libs.androidx.navigation.compose)
+    implementation(libs.androidx.navigation.compose)
 }

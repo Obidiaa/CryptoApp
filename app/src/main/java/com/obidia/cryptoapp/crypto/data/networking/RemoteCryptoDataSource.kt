@@ -1,5 +1,6 @@
 package com.obidia.cryptoapp.crypto.data.networking
 
+import com.obidia.cryptoapp.BuildConfig
 import com.obidia.cryptoapp.core.data.networking.constructUrl
 import com.obidia.cryptoapp.core.data.networking.safeCall
 import com.obidia.cryptoapp.core.domain.util.NetworkError
@@ -26,7 +27,9 @@ import java.time.ZonedDateTime
 class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSource {
     override suspend fun getCryptoList(): Result<Flow<List<Crypto>>, NetworkError> {
         return safeCall<CryptoResponseDto> {
-            httpClient.get(urlString = constructUrl("/assets"))
+            httpClient.get(urlString = constructUrl("/assets")) {
+                parameter(key = "apiKey", value = BuildConfig.API_KEY)
+            }
         }.map { response ->
             flow { emit(response.data.map { it.toCrypto() }) }
         }
@@ -34,7 +37,9 @@ class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSou
 
     override suspend fun getCryptoDetail(cryptoId: String): Result<CryptoDetail, NetworkError> {
         return safeCall<CryptoDetailDto> {
-            httpClient.get(constructUrl("/assets/$cryptoId"))
+            httpClient.get(constructUrl("/assets/$cryptoId")) {
+                parameter(key = "apiKey", value = BuildConfig.API_KEY)
+            }
         }.map { response ->
             response.toCryptoDetail()
         }
@@ -71,6 +76,7 @@ class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSou
                 parameter("interval", intervalCrypto)
                 parameter("start", startMillis)
                 parameter("end", endMillis)
+                parameter(key = "apiKey", value = BuildConfig.API_KEY)
             }
         }.map { response ->
             response.data.map { it.toCryptoPrice() }

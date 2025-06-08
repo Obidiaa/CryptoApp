@@ -30,14 +30,12 @@ import com.obidia.cryptoapp.ui.theme.RobotoMono
 fun ErrorDialog(
     errorDataState: ErrorDataState? = null,
     txtButton: String = "Try",
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    val isShow = remember { mutableStateOf(false) }
-    isShow.value = errorDataState != null
 
-    if (isShow.value) Dialog(
+    Dialog(
         onDismissRequest = {
-            isShow.value = false
+            onClick.invoke()
         }
     ) {
         Column(
@@ -69,10 +67,7 @@ fun ErrorDialog(
             )
 
             Button(
-                onClick = {
-                    isShow.value = false
-                    onClick.invoke()
-                }
+                onClick = { onClick.invoke() }
             ) {
                 Text(text = txtButton)
             }
@@ -86,6 +81,6 @@ fun ErrorDialog(
 @Composable
 fun ErrorDialogPreview() {
     CryptoAppTheme {
-        ErrorDialog() {}
+        ErrorDialog(onClick = {})
     }
 }

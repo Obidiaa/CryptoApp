@@ -9,6 +9,7 @@ import com.obidia.cryptoapp.core.domain.util.onSuccess
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.toErrorDataState
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.onStart
@@ -61,8 +62,10 @@ class CryptoDetailViewModel(
             }
 
             is CryptoDetailEvent.OnClickErrorBtn -> {
-                _state.update {
-                    it.copy(errorDataState = null)
+                viewModelScope.launch {
+                    _state.update {
+                        it.copy(errorDataState = null)
+                    }
                 }
             }
         }

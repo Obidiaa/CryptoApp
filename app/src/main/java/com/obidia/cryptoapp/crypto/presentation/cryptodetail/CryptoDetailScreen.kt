@@ -34,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -60,6 +61,8 @@ import com.obidia.cryptoapp.crypto.presentation.cryptodetail.components.LineChar
 import com.obidia.cryptoapp.crypto.presentation.cryptodetail.model.ChartStyle
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import com.obidia.cryptoapp.ui.theme.RobotoMono
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -83,6 +86,7 @@ fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
         val viewModel = koinViewModel<CryptoDetailViewModel>()
         val event = viewModel::action
         val state = viewModel.state.collectAsStateWithLifecycle().value
+        val coroutineScope = rememberCoroutineScope()
 
         CoinDetailScreen(
             state = state,
@@ -93,9 +97,18 @@ fun NavGraphBuilder.cryptoDetailScreen(navigate: (Route) -> Unit) {
             navigate = navigate
         )
 
-        ErrorDialog(errorDataState = state.errorDataState, txtButton = "Back") {
-            viewModel.action(CryptoDetailEvent.OnClickErrorBtn)
-            navigate(BackStack)
+        state.errorDataState?.let {
+            ErrorDialog(
+                errorDataState = it,
+                txtButton = "Back",
+                onClick = {
+                    coroutineScope.launch {
+                        event(CryptoDetailEvent.OnClickErrorBtn)
+                        delay(100)
+                        navigate(BackStack)
+                    }
+                }
+            )
         }
     }
 }

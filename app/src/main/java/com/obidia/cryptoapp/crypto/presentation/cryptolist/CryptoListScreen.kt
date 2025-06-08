@@ -40,20 +40,7 @@ import com.obidia.cryptoapp.ui.theme.RobotoMono
 import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
-    composable<CryptoListScreenRoute>(
-//        enterTransition = {
-//            slideIntoContainer(
-//                AnimatedContentTransitionScope.SlideDirection.End,
-//                tween(700)
-//            )
-//        },
-//        exitTransition = {
-//            slideOutOfContainer(
-//                AnimatedContentTransitionScope.SlideDirection.Start,
-//                tween(700)
-//            )
-//        },
-    ) {
+    composable<CryptoListScreenRoute>{
         val viewModel = koinViewModel<CryptoListViewModel>()
         val state by viewModel.state.collectAsStateWithLifecycle()
 
@@ -66,8 +53,9 @@ fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
             }
         )
 
-        ErrorDialog(errorDataState = state.errorState) {
-            viewModel.action(CryptoListAction.OnClickErrorBtn)
+        state.errorState?.let {
+            ErrorDialog(errorDataState = it, onClick = {}
+            )
         }
     }
 }

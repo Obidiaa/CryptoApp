@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 import java.time.ZonedDateTime
 
 interface CryptoDataSource {
-    suspend fun getCryptoList(): Result<Flow<List<Crypto>>, NetworkError>
+    suspend fun getCryptoList(): Flow<Result<List<Crypto>, NetworkError>>
     suspend fun getHistory(
         cryptoId: String,
         start: ZonedDateTime,

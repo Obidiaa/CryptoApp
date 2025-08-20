@@ -1,8 +1,10 @@
 package com.obidia.cryptoapp.crypto.data.networking
 
+import android.util.Log
 import com.obidia.cryptoapp.BuildConfig
 import com.obidia.cryptoapp.core.data.networking.constructUrl
 import com.obidia.cryptoapp.core.data.networking.safeCall
+import com.obidia.cryptoapp.core.data.networking.safeCallTest
 import com.obidia.cryptoapp.core.domain.util.NetworkError
 import com.obidia.cryptoapp.core.domain.util.Result
 import com.obidia.cryptoapp.core.domain.util.map
@@ -12,10 +14,10 @@ import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCryptoDetail
 import com.obidia.cryptoapp.crypto.data.networking.dto.detail.toCryptoPrice
 import com.obidia.cryptoapp.crypto.data.networking.dto.list.CryptoResponseDto
 import com.obidia.cryptoapp.crypto.data.networking.dto.list.toCrypto
+import com.obidia.cryptoapp.crypto.domain.Crypto
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
 import com.obidia.cryptoapp.crypto.domain.CryptoDetail
 import com.obidia.cryptoapp.crypto.domain.CryptoPrice
-import com.obidia.cryptoapp.crypto.domain.Crypto
 import io.ktor.client.HttpClient
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
@@ -25,13 +27,18 @@ import java.time.ZoneId
 import java.time.ZonedDateTime
 
 class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSource {
-    override suspend fun getCryptoList(): Result<Flow<List<Crypto>>, NetworkError> {
-        return safeCall<CryptoResponseDto> {
-            httpClient.get(urlString = constructUrl("/assets")) {
-                parameter(key = "apiKey", value = BuildConfig.API_KEY)
-            }
-        }.map { response ->
-            flow { emit(response.data.map { it.toCrypto() }) }
+    override suspend fun getCryptoList(): Flow<Result<List<Crypto>, NetworkError>> {
+        return flow {
+            emit(Result.Loading)
+            emit(
+                safeCallTest<CryptoResponseDto> {
+                    httpClient.get(urlString = constructUrl("/assets")) {
+                        parameter(key = "apiKey", value = BuildConfig.API_KEY)
+                    }
+                }.map { response ->
+                    response.data.map { it.toCrypto() }
+                }
+            )
         }
     }
 

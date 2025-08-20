@@ -19,7 +19,11 @@ object HttpClientFactory {
         return HttpClient(engine) {
             install(Logging) {
                 level = LogLevel.ALL
-                logger = Logger.ANDROID
+                logger = object : Logger {
+                    override fun log(message: String) {
+                        println("kesini"+message)
+                    }
+                }
             }
             install(ContentNegotiation) {
                 json(

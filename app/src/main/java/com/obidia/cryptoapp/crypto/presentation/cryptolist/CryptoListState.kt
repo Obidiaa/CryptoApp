@@ -10,7 +10,7 @@ import com.obidia.cryptoapp.crypto.domain.Crypto
 
 @Immutable
 data class CryptoListState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val cryptoList: List<CryptoItemUi> = emptyList(),
     val selectedCrypto: CryptoItemUi? = null,
     val errorState: ErrorDataState? = null

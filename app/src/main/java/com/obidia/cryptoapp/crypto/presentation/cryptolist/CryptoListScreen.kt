@@ -15,12 +15,20 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults.Indicator
+import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -37,6 +45,8 @@ import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.CryptoList
 import com.obidia.cryptoapp.crypto.presentation.cryptolist.components.dataPreview
 import com.obidia.cryptoapp.ui.theme.CryptoAppTheme
 import com.obidia.cryptoapp.ui.theme.RobotoMono
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.koin.androidx.compose.koinViewModel
 
 fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
@@ -60,6 +70,7 @@ fun NavGraphBuilder.cryptoListScreenRoute(navigate: (Route) -> Unit) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CoinListScreen(
     uiState: CryptoListState,
@@ -67,6 +78,10 @@ fun CoinListScreen(
     action: (CryptoListAction) -> Unit,
     onClick: (id: String) -> Unit
 ) {
+    val pullToRefreshState = rememberPullToRefreshState()
+    val isRefresh = remember { mutableStateOf(false) }
+    val coroutineScope = rememberCoroutineScope()
+
     if (uiState.isLoading) {
         Box(
             modifier = modifier
@@ -77,56 +92,79 @@ fun CoinListScreen(
             CircularProgressIndicator()
         }
     } else {
-        LazyColumn(
-            modifier = modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colorScheme.surfaceContainerHighest),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+        PullToRefreshBox(
+            isRefreshing = isRefresh.value,
+            onRefresh = {
+                coroutineScope.launch {
+                    isRefresh.value = true
+                    action(CryptoListAction.OnRefresh)
+                    delay(500)
+                    isRefresh.value = false
+                }
+            },
+            modifier = modifier,
+            state = pullToRefreshState,
+            indicator = {
+                Indicator(
+                    modifier = Modifier.align(Alignment.TopCenter),
+                    isRefreshing = isRefresh.value,
+                    containerColor = MaterialTheme.colorScheme.primaryContainer,
+                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                    state = pullToRefreshState
+                )
+            },
         ) {
-            item {
-                Column(
-                    modifier = Modifier
-                        .background(MaterialTheme.colorScheme.primary)
-                        .fillParentMaxWidth(),
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Spacer(
-                        modifier = Modifier.height(
-                            WindowInsets.statusBars
-                                .asPaddingValues()
-                                .calculateTopPadding()
-                        )
-                    )
-
-                    Box(
-                        modifier = Modifier.height(56.dp)
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MaterialTheme.colorScheme.surfaceContainerHighest),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                item {
+                    Column(
+                        modifier = Modifier
+                            .background(MaterialTheme.colorScheme.primary)
+                            .fillParentMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Text(
-                            modifier = Modifier.align(Alignment.Center),
-                            text = "Cryptocurrency".uppercase(),
-                            style = MaterialTheme.typography.headlineSmall.copy(
-                                fontFamily = RobotoMono,
-                                fontWeight = FontWeight.Bold,
-                                textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                        Spacer(
+                            modifier = Modifier.height(
+                                WindowInsets.statusBars
+                                    .asPaddingValues()
+                                    .calculateTopPadding()
                             )
                         )
+
+                        Box(
+                            modifier = Modifier.height(56.dp)
+                        ) {
+                            Text(
+                                modifier = Modifier.align(Alignment.Center),
+                                text = "Cryptocurrency".uppercase(),
+                                style = MaterialTheme.typography.headlineSmall.copy(
+                                    fontFamily = RobotoMono,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    color = MaterialTheme.colorScheme.onPrimary,
+                                )
+                            )
+                        }
                     }
                 }
-            }
-            items(items = uiState.cryptoList) {
-                CryptoListItem(data = it, modifier = Modifier.fillMaxWidth()) {
-                    onClick(it.id)
+                items(items = uiState.cryptoList) {
+                    CryptoListItem(data = it, modifier = Modifier.fillMaxWidth()) {
+                        onClick(it.id)
+                    }
                 }
-            }
 
-            item {
-                Spacer(
-                    modifier = Modifier.height(
-                        WindowInsets.systemBars.asPaddingValues(LocalDensity.current)
-                            .calculateBottomPadding()
+                item {
+                    Spacer(
+                        modifier = Modifier.height(
+                            WindowInsets.systemBars.asPaddingValues(LocalDensity.current)
+                                .calculateBottomPadding()
+                        )
                     )
-                )
+                }
             }
         }
     }

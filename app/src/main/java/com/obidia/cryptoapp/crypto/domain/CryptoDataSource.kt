@@ -14,5 +14,5 @@ interface CryptoDataSource {
         interval: String
     ): Result<List<CryptoPrice>, NetworkError>
 
-    suspend fun getCryptoDetail(cryptoId: String): Result<CryptoDetail, NetworkError>
+    suspend fun getCryptoDetail(cryptoId: String): Flow<Result<CryptoDetail, NetworkError>>
 }

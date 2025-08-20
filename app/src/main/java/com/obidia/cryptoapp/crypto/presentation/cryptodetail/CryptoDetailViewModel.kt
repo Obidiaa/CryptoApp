@@ -5,10 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.obidia.cryptoapp.core.domain.util.onError
+import com.obidia.cryptoapp.core.domain.util.onLoading
 import com.obidia.cryptoapp.core.domain.util.onSuccess
 import com.obidia.cryptoapp.core.presentation.util.CryptoDetailScreenRoute
 import com.obidia.cryptoapp.core.presentation.util.toErrorDataState
 import com.obidia.cryptoapp.crypto.domain.CryptoDataSource
+import com.obidia.cryptoapp.crypto.presentation.cryptolist.restartableStateIn
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -29,28 +31,29 @@ class CryptoDetailViewModel(
     val state = _state.onStart {
         getDetailCoin()
         getHistoryCoin(cryptoId, "1d")
-    }.stateIn(
+    }.restartableStateIn(
         viewModelScope,
-        SharingStarted.WhileSubscribed(5000L),
         CryptoDetailState()
     )
 
     private fun getDetailCoin() = viewModelScope.launch {
-        _state.update { it.copy(isCryptoDetailLoading = true) }
-
-        dataSource.getCryptoDetail(cryptoId).onSuccess { coinDetail ->
-            _state.update {
-                it.copy(
-                    isCryptoDetailLoading = false,
-                    cryptoDetailUi = coinDetail.toCryptoDetailUi(),
-                )
-            }
-        }.onError { error ->
-            _state.update {
-                it.copy(
-                    errorDataState = error.toErrorDataState(),
-                    isCryptoDetailLoading = false,
-                )
+        dataSource.getCryptoDetail(cryptoId).collect { result ->
+            result.onSuccess { coinDetail ->
+                _state.update {
+                    it.copy(
+                        isCryptoDetailLoading = false,
+                        cryptoDetailUi = coinDetail.toCryptoDetailUi(),
+                    )
+                }
+            }.onError { error ->
+                _state.update {
+                    it.copy(
+                        errorDataState = error.toErrorDataState(),
+                        isCryptoDetailLoading = false,
+                    )
+                }
+            }.onLoading {
+                _state.update { it.copy(isCryptoDetailLoading = true) }
             }
         }
     }

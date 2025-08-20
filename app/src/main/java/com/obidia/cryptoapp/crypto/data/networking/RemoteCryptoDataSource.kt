@@ -42,13 +42,18 @@ class RemoteCryptoDataSource(private val httpClient: HttpClient) : CryptoDataSou
         }
     }
 
-    override suspend fun getCryptoDetail(cryptoId: String): Result<CryptoDetail, NetworkError> {
-        return safeCall<CryptoDetailDto> {
-            httpClient.get(constructUrl("/assets/$cryptoId")) {
-                parameter(key = "apiKey", value = BuildConfig.API_KEY)
-            }
-        }.map { response ->
-            response.toCryptoDetail()
+    override suspend fun getCryptoDetail(cryptoId: String): Flow<Result<CryptoDetail, NetworkError>> {
+        return flow {
+            emit(Result.Loading)
+            emit(
+                safeCallTest<CryptoDetailDto> {
+                    httpClient.get(constructUrl("/assets/$cryptoId")) {
+                        parameter(key = "apiKey", value = BuildConfig.API_KEY)
+                    }
+                }.map { response ->
+                    response.toCryptoDetail()
+                }
+            )
         }
     }
 
